@@ -1,0 +1,2073 @@
+{
+  "info": {
+    "name": "SMD API - Syllabus Management System",
+    "_postman_id": "smd-api-collection",
+    "description": "Complete API collection for Syllabus Management and Digitalization System (SMD)\n\n## Authentication\nMost endpoints require Firebase authentication. Set the `firebase_token` variable after logging in.\n\n## Base URL\n- Local: http://localhost:8000\n- Production: Set your production URL",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "firebase_token",
+      "value": "",
+      "type": "string",
+      "description": "Firebase ID token for authentication"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{firebase_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "description": "Public health check endpoints - no authentication required",
+      "item": [
+        {
+          "name": "Basic Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Basic health check - returns app status"
+          },
+          "response": []
+        },
+        {
+          "name": "Database Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health/db",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health", "db"]
+            },
+            "description": "Check database connection status"
+          },
+          "response": []
+        },
+        {
+          "name": "Supabase Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health/supabase",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health", "supabase"]
+            },
+            "description": "Check Supabase connection status"
+          },
+          "response": []
+        },
+        {
+          "name": "Full Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health/full",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health", "full"]
+            },
+            "description": "Complete health check of all services (app, database, Supabase, Firebase)"
+          },
+          "response": []
+        },
+        {
+          "name": "Database Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/health/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "health", "stats"]
+            },
+            "description": "Get database statistics - counts and sample data"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "description": "Firebase authentication endpoints",
+      "item": [
+        {
+          "name": "Get Firebase Config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/firebase-config",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "firebase-config"]
+            },
+            "description": "Get Firebase configuration for frontend initialization"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{firebase_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/verify",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "verify"]
+            },
+            "description": "Verify Firebase ID token and check if user is registered"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get current authenticated user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            },
+            "description": "Logout notification - client should clear Firebase session"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "User management endpoints (Admin only)",
+      "item": [
+        {
+          "name": "List All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "role", "value": "", "disabled": true},
+                {"key": "department_id", "value": "", "disabled": true},
+                {"key": "is_active", "value": "true", "disabled": true},
+                {"key": "search", "value": "", "disabled": true},
+                {"key": "sortBy", "value": "created_date", "disabled": true},
+                {"key": "sortOrder", "value": "desc", "disabled": true}
+              ]
+            },
+            "description": "Get paginated list of all users with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Contacts for Messaging",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/contacts?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "contacts"],
+              "query": [
+                {"key": "limit", "value": "20"},
+                {"key": "search", "value": "", "disabled": true},
+                {"key": "role", "value": "", "disabled": true},
+                {"key": "department_id", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get available contacts for internal messaging"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "description": "Get user details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@ut.edu.vn\",\n  \"password\": \"password123\",\n  \"first_name\": \"Nguyen\",\n  \"last_name\": \"Van A\",\n  \"role\": \"LECTURER\",\n  \"department_id\": 1,\n  \"faculty_position\": \"Giảng viên\",\n  \"phone\": \"0901234567\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users"]
+            },
+            "description": "Create a new user (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Nguyen Updated\",\n  \"phone\": \"0909876543\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "description": "Update user information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Deactivate)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "1"]
+            },
+            "description": "Deactivate user (soft delete)"
+          },
+          "response": []
+        },
+        {
+          "name": "Change User Role",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/1/role?role=HOD",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "users", "1", "role"],
+              "query": [
+                {"key": "role", "value": "HOD"}
+              ]
+            },
+            "description": "Assign or change user role"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Departments",
+      "description": "Department management endpoints",
+      "item": [
+        {
+          "name": "List All Departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "search", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get list of all departments"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Department by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
+            },
+            "description": "Get department details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dept_code\": \"TEST\",\n  \"dept_name\": \"Test Department\",\n  \"dept_name_vn\": \"Khoa Test\",\n  \"email\": \"test@ut.edu.vn\",\n  \"phone\": \"028-1234-5600\",\n  \"office_location\": \"Building F, Room 101\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments"]
+            },
+            "description": "Create a new department"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dept_name\": \"Updated Department Name\",\n  \"email\": \"updated@ut.edu.vn\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
+            },
+            "description": "Update department information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/departments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "departments", "1"]
+            },
+            "description": "Delete a department"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Programs",
+      "description": "Academic program management endpoints",
+      "item": [
+        {
+          "name": "List All Programs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "department_id", "value": "", "disabled": true},
+                {"key": "degree_type", "value": "", "disabled": true},
+                {"key": "is_active", "value": "true", "disabled": true},
+                {"key": "search", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get list of all academic programs"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Program by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1"]
+            },
+            "description": "Get program details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Program",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"program_code\": \"TEST-DH\",\n  \"program_name\": \"Test Program\",\n  \"program_name_vn\": \"Chương trình Test\",\n  \"department_id\": 1,\n  \"degree_type\": \"Bachelor\",\n  \"duration_years\": 4,\n  \"total_credits\": 130,\n  \"description\": \"Test program description\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs"]
+            },
+            "description": "Create a new academic program"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Program",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"program_name\": \"Updated Program Name\",\n  \"total_credits\": 135\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1"]
+            },
+            "description": "Update program information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Program",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1"]
+            },
+            "description": "Delete a program"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Courses in Program",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1/courses?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1", "courses"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"}
+              ]
+            },
+            "description": "Get all courses in a program"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Program Learning Outcomes (PLOs)",
+      "description": "PLO management for academic programs",
+      "item": [
+        {
+          "name": "List PLOs by Program",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1/plos?page=1&pageSize=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1", "plos"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "20"},
+                {"key": "category", "value": "", "disabled": true},
+                {"key": "is_active", "value": "true", "disabled": true}
+              ]
+            },
+            "description": "Get all PLOs for a program"
+          },
+          "response": []
+        },
+        {
+          "name": "Create PLO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"PLO1\",\n  \"description\": \"Apply fundamental programming concepts and algorithms\",\n  \"category\": \"Knowledge\",\n  \"display_order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1/plos",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1", "plos"]
+            },
+            "description": "Create a new PLO for a program"
+          },
+          "response": []
+        },
+        {
+          "name": "Update PLO",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated PLO description\",\n  \"category\": \"Skills\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1/plos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1", "plos", "1"]
+            },
+            "description": "Update a PLO"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete PLO",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/programs/1/plos/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "programs", "1", "plos", "1"]
+            },
+            "description": "Delete a PLO"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "description": "Course management endpoints",
+      "item": [
+        {
+          "name": "List All Courses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "department_id", "value": "", "disabled": true},
+                {"key": "program_id", "value": "", "disabled": true},
+                {"key": "is_elective", "value": "", "disabled": true},
+                {"key": "is_active", "value": "true", "disabled": true},
+                {"key": "search", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get list of all courses with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Course by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "1"]
+            },
+            "description": "Get course details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Course",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_code\": \"TEST101\",\n  \"course_name\": \"Test Course\",\n  \"course_name_vn\": \"Môn học Test\",\n  \"department_id\": 1,\n  \"program_id\": 1,\n  \"description\": \"Test course description\",\n  \"is_elective\": false,\n  \"min_students\": 20,\n  \"max_students\": 50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses"]
+            },
+            "description": "Create a new course"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Course",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_name\": \"Updated Course Name\",\n  \"max_students\": 60\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "1"]
+            },
+            "description": "Update course information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Course",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/courses/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "courses", "1"]
+            },
+            "description": "Delete a course"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Syllabi",
+      "description": "Syllabus management endpoints",
+      "item": [
+        {
+          "name": "List All Syllabi",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "course_id", "value": "", "disabled": true},
+                {"key": "academic_year", "value": "", "disabled": true},
+                {"key": "semester", "value": "", "disabled": true},
+                {"key": "status", "value": "", "disabled": true},
+                {"key": "created_by", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get list of all syllabi with filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Syllabus by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1"]
+            },
+            "description": "Get syllabus details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Syllabus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"course_id\": 1,\n  \"academic_year\": \"2024-2025\",\n  \"semester\": \"Học kỳ 1\",\n  \"credits\": 3,\n  \"total_hours\": 45,\n  \"learning_outcomes\": \"CLO1: Understand basic concepts\\nCLO2: Apply knowledge\",\n  \"assessment_methods\": \"Midterm: 30%\\nFinal: 50%\\nAssignment: 20%\",\n  \"textbooks\": \"Main textbook: Example Book\",\n  \"teaching_methods\": \"Lecture, Discussion, Practice\",\n  \"prerequisites\": \"None\",\n  \"title\": \"Introduction to Programming\",\n  \"description\": \"Basic programming concepts\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi"]
+            },
+            "description": "Create a new syllabus (Draft status)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Syllabus",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"learning_outcomes\": \"Updated learning outcomes\",\n  \"credits\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1"]
+            },
+            "description": "Update syllabus information"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Syllabus",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1"]
+            },
+            "description": "Delete a syllabus (draft only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Syllabus Versions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/versions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "versions"]
+            },
+            "description": "Get version history for a syllabus"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Syllabus Comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "comments"]
+            },
+            "description": "Get all comments on a syllabus"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment to Syllabus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment_type\": \"Suggestion\",\n  \"section_reference\": \"CLO Section\",\n  \"content\": \"Consider adding more CLOs related to soft skills.\",\n  \"priority\": \"Medium\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "comments"]
+            },
+            "description": "Add a comment to a syllabus"
+          },
+          "response": []
+        },
+        {
+          "name": "Reply to Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Thank you for the suggestion!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/comments/1/reply",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "comments", "1", "reply"]
+            },
+            "description": "Reply to a comment"
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve Comment",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/comments/1/resolve",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "comments", "1", "resolve"]
+            },
+            "description": "Mark a comment as resolved"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Lecturer Module",
+      "description": "Lecturer-specific endpoints for syllabus management",
+      "item": [
+        {
+          "name": "Dashboard",
+          "item": [
+            {
+              "name": "Get Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/dashboard",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "dashboard"]
+                },
+                "description": "Get lecturer dashboard with statistics"
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Courses",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/courses",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "courses"]
+                },
+                "description": "Get courses assigned to the lecturer"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Review Schedules",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/review-schedules",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "review-schedules"]
+                },
+                "description": "Get relevant review schedules for lecturer"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Deadlines",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/deadlines",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "deadlines"]
+                },
+                "description": "Get upcoming deadlines"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Submissions",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/submissions",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "submissions"]
+                },
+                "description": "Get submitted syllabi"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Syllabi Management",
+          "item": [
+            {
+              "name": "Get My Syllabi",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi"]
+                },
+                "description": "Get all syllabi created by current lecturer"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Syllabi by Status",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi?status=Draft",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi"],
+                  "query": [
+                    {"key": "status", "value": "Draft"}
+                  ]
+                },
+                "description": "Get syllabi filtered by status"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Approved Syllabi",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/approved",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "approved"]
+                },
+                "description": "Get approved syllabi eligible for update requests"
+              },
+              "response": []
+            },
+            {
+              "name": "Create Full Syllabus",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"course_id\": 1,\n  \"academic_year\": \"2024-2025\",\n  \"semester\": \"Fall\",\n  \"credits\": 3,\n  \"total_hours\": 45,\n  \"description\": \"Course description\",\n  \"prerequisites\": \"None\",\n  \"learning_outcomes\": \"Basic outcomes\",\n  \"assessment_methods\": \"Midterm + Final\",\n  \"clos\": [\n    {\n      \"code\": \"CLO1\",\n      \"description\": \"Understand basic concepts\",\n      \"bloom_level\": \"Understand\"\n    }\n  ],\n  \"contents\": [\n    {\n      \"week_number\": 1,\n      \"title\": \"Introduction\",\n      \"description\": \"Course overview\",\n      \"lecture_hours\": 2,\n      \"lab_hours\": 1\n    }\n  ],\n  \"assessments\": [\n    {\n      \"name\": \"Midterm Exam\",\n      \"weight\": 30,\n      \"type\": \"Exam\",\n      \"description\": \"Written exam\"\n    }\n  ],\n  \"references\": [\n    {\n      \"title\": \"Main Textbook\",\n      \"authors\": \"Author Name\",\n      \"type\": \"Textbook\",\n      \"is_required\": true\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi"]
+                },
+                "description": "Create a full syllabus with all nested data"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Syllabus Preview",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/preview",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "preview"]
+                },
+                "description": "Get formatted syllabus preview for display"
+              },
+              "response": []
+            },
+            {
+              "name": "Save Draft",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated description\",\n  \"prerequisites\": \"Updated prerequisites\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/draft",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "draft"]
+                },
+                "description": "Save syllabus draft"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "CLO Management",
+          "item": [
+            {
+              "name": "Add CLO",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"CLO1\",\n  \"description\": \"Understand fundamental concepts\",\n  \"bloom_level\": \"Understand\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/clos",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "clos"]
+                },
+                "description": "Add a CLO to syllabus"
+              },
+              "response": []
+            },
+            {
+              "name": "Update CLO",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"description\": \"Updated CLO description\",\n  \"bloom_level\": \"Apply\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/clos/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "clos", "1"]
+                },
+                "description": "Update a CLO"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete CLO",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/clos/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "clos", "1"]
+                },
+                "description": "Delete a CLO"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Content Management",
+          "item": [
+            {
+              "name": "Add Content",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"week_number\": 1,\n  \"title\": \"Introduction\",\n  \"description\": \"Course overview and introduction\",\n  \"lecture_hours\": 2,\n  \"lab_hours\": 1,\n  \"teaching_methods\": [\"Lecture\", \"Discussion\"]\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/contents",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "contents"]
+                },
+                "description": "Add content/week to syllabus"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Content",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Week Title\",\n  \"lecture_hours\": 3\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/contents/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "contents", "1"]
+                },
+                "description": "Update content"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Content",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/contents/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "contents", "1"]
+                },
+                "description": "Delete content"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Assessment Management",
+          "item": [
+            {
+              "name": "Add Assessment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Final Exam\",\n  \"weight\": 50,\n  \"type\": \"Exam\",\n  \"description\": \"Comprehensive final exam\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/assessments",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "assessments"]
+                },
+                "description": "Add assessment to syllabus"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Assessment",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"weight\": 40,\n  \"description\": \"Updated assessment description\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/assessments/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "assessments", "1"]
+                },
+                "description": "Update assessment"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Assessment",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/assessments/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "assessments", "1"]
+                },
+                "description": "Delete assessment"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Reference Management",
+          "item": [
+            {
+              "name": "Add Reference",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Main Textbook\",\n  \"authors\": \"Author Name\",\n  \"type\": \"Textbook\",\n  \"is_required\": true,\n  \"year\": 2024,\n  \"publisher\": \"Publisher Name\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/references",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "references"]
+                },
+                "description": "Add reference to syllabus"
+              },
+              "response": []
+            },
+            {
+              "name": "Update Reference",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Updated Book Title\",\n  \"year\": 2025\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/references/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "references", "1"]
+                },
+                "description": "Update reference"
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Reference",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/references/1",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "references", "1"]
+                },
+                "description": "Delete reference"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Validation & Submission",
+          "item": [
+            {
+              "name": "Validate Syllabus",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/validate",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "validate"]
+                },
+                "description": "Validate syllabus before submission"
+              },
+              "response": []
+            },
+            {
+              "name": "Submit for Review",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"notes\": \"Please review this syllabus for the upcoming semester.\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/submit",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "submit"]
+                },
+                "description": "Submit syllabus for review"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Submission Status",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/status",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "status"]
+                },
+                "description": "Get submission status"
+              },
+              "response": []
+            },
+            {
+              "name": "Get Approval Timeline",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/approval-timeline",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "approval-timeline"]
+                },
+                "description": "Get detailed approval timeline"
+              },
+              "response": []
+            },
+            {
+              "name": "Withdraw Submission",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/withdraw",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "withdraw"]
+                },
+                "description": "Withdraw submitted syllabus"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Feedback",
+          "item": [
+            {
+              "name": "Get Feedback",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/lecturer/syllabi/1/feedback",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "lecturer", "syllabi", "1", "feedback"]
+                },
+                "description": "Get feedback on syllabus"
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Peer Reviews",
+      "description": "Peer evaluation endpoints",
+      "item": [
+        {
+          "name": "Get Assigned Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/peer-reviews",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "peer-reviews"]
+            },
+            "description": "Get peer reviews assigned to current user"
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Peer Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"syllabus_id\": 1,\n  \"scores\": [\n    {\n      \"criteria_id\": 1,\n      \"score\": 4,\n      \"comments\": \"Good content structure\"\n    },\n    {\n      \"criteria_id\": 2,\n      \"score\": 5,\n      \"comments\": \"Excellent formatting\"\n    }\n  ],\n  \"overall_comments\": \"Well-prepared syllabus\",\n  \"recommendation\": \"Approve\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/peer-reviews",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "peer-reviews"]
+            },
+            "description": "Submit peer review evaluation"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Peer Review by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/peer-reviews/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "peer-reviews", "1"]
+            },
+            "description": "Get peer review details"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Update Requests",
+      "description": "Update request workflow for approved syllabi",
+      "item": [
+        {
+          "name": "List Update Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/update-requests",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "update-requests"],
+              "query": [
+                {"key": "status", "value": "", "disabled": true},
+                {"key": "syllabus_id", "value": "", "disabled": true},
+                {"key": "skip", "value": "0", "disabled": true},
+                {"key": "limit", "value": "100", "disabled": true}
+              ]
+            },
+            "description": "List all update requests"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Update Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/update-requests/my-requests",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "update-requests", "my-requests"]
+            },
+            "description": "Get update requests created by current user"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Update Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"syllabus_id\": 1,\n  \"request_type\": \"Content Update\",\n  \"description\": \"Need to update the assessment weights based on new policy\",\n  \"justification\": \"Aligning with department guidelines\",\n  \"proposed_changes\": \"Change midterm from 30% to 25%, final from 50% to 55%\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/update-requests",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "update-requests"]
+            },
+            "description": "Create a new update request"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Update Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/update-requests/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "update-requests", "1"]
+            },
+            "description": "Get update request details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Draft Changes",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"proposed_changes\": \"Updated proposed changes text\",\n  \"justification\": \"Updated justification\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/update-requests/1/draft-changes",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "update-requests", "1", "draft-changes"]
+            },
+            "description": "Update draft changes for an update request"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "description": "Internal messaging endpoints",
+      "item": [
+        {
+          "name": "Get Contacts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/contacts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "contacts"]
+            },
+            "description": "Get message contacts"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Inbox",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/inbox",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "inbox"]
+            },
+            "description": "Get inbox messages"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sent Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/sent",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "sent"]
+            },
+            "description": "Get sent messages"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/conversations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "conversations"]
+            },
+            "description": "Get conversation threads"
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipient_id\": 2,\n  \"subject\": \"Question about syllabus\",\n  \"body\": \"Hello, I have a question about the syllabus...\",\n  \"syllabus_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages"]
+            },
+            "description": "Send a new message"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Message by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "1"]
+            },
+            "description": "Get message details"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Evaluation Templates",
+      "description": "Evaluation template and criteria management",
+      "item": [
+        {
+          "name": "List Evaluation Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/evaluation-templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "evaluation-templates"],
+              "query": [
+                {"key": "is_active", "value": "true", "disabled": true}
+              ]
+            },
+            "description": "Get list of evaluation templates"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Default Template",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/evaluation-templates/default",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "evaluation-templates", "default"]
+            },
+            "description": "Get the default evaluation template"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Template by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/evaluation-templates/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "evaluation-templates", "1"]
+            },
+            "description": "Get evaluation template by ID with criteria"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Evaluation Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Custom Evaluation Template\",\n  \"description\": \"Custom template for specific programs\",\n  \"is_default\": false,\n  \"criteria\": [\n    {\n      \"name\": \"Content Quality\",\n      \"description\": \"Evaluate content quality\",\n      \"category\": \"Content\",\n      \"weight\": 40,\n      \"max_score\": 5,\n      \"is_mandatory\": true\n    },\n    {\n      \"name\": \"Format\",\n      \"description\": \"Evaluate formatting\",\n      \"category\": \"Format\",\n      \"weight\": 30,\n      \"max_score\": 5,\n      \"is_mandatory\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/evaluation-templates",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "evaluation-templates"]
+            },
+            "description": "Create a new evaluation template"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "description": "Notification management endpoints",
+      "item": [
+        {
+          "name": "List My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications?skip=0&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications"],
+              "query": [
+                {"key": "skip", "value": "0"},
+                {"key": "limit", "value": "20"},
+                {"key": "is_read", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get current user's notifications"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/unread-count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "unread-count"]
+            },
+            "description": "Get count of unread notifications"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/1/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "1", "read"]
+            },
+            "description": "Mark a notification as read"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All as Read",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/read-all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "read-all"]
+            },
+            "description": "Mark all notifications as read"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Academic Years",
+      "description": "Academic year, semester, and submission period management",
+      "item": [
+        {
+          "name": "List Academic Years",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years?page=1&pageSize=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "pageSize", "value": "10"},
+                {"key": "is_active", "value": "", "disabled": true}
+              ]
+            },
+            "description": "Get list of all academic years"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Academic Year",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years/current",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years", "current"]
+            },
+            "description": "Get current active academic year"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Academic Year by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years", "1"]
+            },
+            "description": "Get academic year details by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Academic Year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"2026-2027\",\n  \"start_date\": \"2026-09-01\",\n  \"end_date\": \"2027-08-31\",\n  \"is_active\": false,\n  \"semesters\": [\n    {\n      \"name\": \"Học kỳ 1\",\n      \"start_date\": \"2026-09-01\",\n      \"end_date\": \"2026-12-31\"\n    },\n    {\n      \"name\": \"Học kỳ 2\",\n      \"start_date\": \"2027-01-15\",\n      \"end_date\": \"2027-05-31\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years"]
+            },
+            "description": "Create a new academic year with semesters"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Academic Year",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years", "1"]
+            },
+            "description": "Update academic year"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Academic Year",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/academic-years/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "academic-years", "1"]
+            },
+            "description": "Delete academic year"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Approvals",
+      "description": "Syllabus approval workflow endpoints",
+      "item": [
+        {
+          "name": "Get Approval History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/approval-history",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "approval-history"]
+            },
+            "description": "Get approval history for a syllabus"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Syllabus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Approve\",\n  \"comments\": \"Approved. Good work!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/approve",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "approve"]
+            },
+            "description": "Approve a syllabus (HoD or Academic Affairs)"
+          },
+          "response": []
+        },
+        {
+          "name": "Request Revision",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Request Revision\",\n  \"comments\": \"Please update the learning outcomes section.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/approve",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "approve"]
+            },
+            "description": "Request revision for a syllabus"
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Syllabus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"Reject\",\n  \"comments\": \"Does not meet requirements.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/syllabi/1/approve",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "syllabi", "1", "approve"]
+            },
+            "description": "Reject a syllabus"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

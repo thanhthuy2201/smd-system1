@@ -1,0 +1,61 @@
+# FastAPI & Web
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+httpx==0.27.0
+aiohttp==3.10.0
+
+# Task Queue
+celery[redis]==5.4.0
+redis==5.0.0
+flower==2.0.1  # Celery monitoring
+
+# Database
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+asyncpg==0.29.0
+pgvector==0.3.0
+
+# NLP & AI - Local Models
+transformers==4.44.0
+sentence-transformers==3.0.0
+torch==2.4.0
+underthesea==6.8.4  # Vietnamese NLP
+pyvi==0.1.1  # Vietnamese tokenizer
+
+# LangChain for orchestration
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-openai==0.1.23
+langchain-google-genai==1.0.10
+
+# GenAI APIs
+openai==1.43.0
+google-generativeai==0.7.2
+
+# Crawler & Document Processing
+selenium==4.24.0
+webdriver-manager==4.0.2
+beautifulsoup4==4.12.3
+lxml==5.3.0
+
+# PDF & OCR
+PyPDF2==3.0.1
+pdf2image==1.17.0
+pytesseract==0.3.10
+pillow==10.4.0
+
+# Search & Vector
+elasticsearch==8.15.0
+
+# Utilities
+python-dotenv==1.0.1
+pydantic==2.9.0
+pydantic-settings==2.5.0
+numpy==1.26.4
+scikit-learn==1.5.1
+python-jose[cryptography]==3.3.0
+
+# Development
+pytest==8.3.0
+pytest-asyncio==0.24.0
