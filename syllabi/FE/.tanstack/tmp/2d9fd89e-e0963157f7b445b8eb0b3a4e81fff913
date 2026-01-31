@@ -1,0 +1,8 @@
+import { createFileRoute } from '@tanstack/react-router'
+import ReviewScheduleDetail from '@/features/review-schedules/detail'
+
+export const Route = createFileRoute(
+  '/_authenticated/review-schedules/detail/$id'
+)({
+  component: ReviewScheduleDetail,
+})

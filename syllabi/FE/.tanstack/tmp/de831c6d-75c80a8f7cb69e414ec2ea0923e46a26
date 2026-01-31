@@ -1,0 +1,11 @@
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute('/_authenticated/review-schedules/create')(
+  {
+    component: RouteComponent,
+  },
+)
+
+function RouteComponent() {
+  return <div>Hello "/_authenticated/review-schedules/create"!</div>
+}

@@ -1,0 +1,184 @@
+/**
+ * Focus Indicators for Lecturer Module
+ * 
+ * Enhanced focus styles following WCAG 2.1 AA standards
+ * Requirement 11.9: Focus indicators for keyboard navigation
+ */
+
+/* Enhanced focus-visible styles for keyboard navigation */
+.lecturer-module *:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Button focus styles */
+.lecturer-module button:focus-visible,
+.lecturer-module [role="button"]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.1);
+}
+
+/* Link focus styles */
+.lecturer-module a:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Input focus styles */
+.lecturer-module input:focus-visible,
+.lecturer-module textarea:focus-visible,
+.lecturer-module select:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 0;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+}
+
+/* Checkbox and radio focus styles */
+.lecturer-module input[type="checkbox"]:focus-visible,
+.lecturer-module input[type="radio"]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.15);
+}
+
+/* Combobox/Select trigger focus styles */
+.lecturer-module [role="combobox"]:focus-visible,
+.lecturer-module [data-radix-select-trigger]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.1);
+}
+
+/* Menu item focus styles */
+.lecturer-module [role="menuitem"]:focus-visible,
+.lecturer-module [role="option"]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: -2px;
+  background-color: hsl(var(--accent));
+}
+
+/* Tab focus styles */
+.lecturer-module [role="tab"]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Dialog/Modal focus styles */
+.lecturer-module [role="dialog"]:focus-visible {
+  outline: none; /* Dialog container doesn't need outline */
+}
+
+/* Card/Interactive container focus styles */
+.lecturer-module [tabindex="0"]:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Skip link focus styles */
+.lecturer-module .skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 0.375rem;
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .lecturer-module *:focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+  }
+  
+  .lecturer-module button:focus-visible,
+  .lecturer-module [role="button"]:focus-visible {
+    outline-width: 3px;
+    box-shadow: 0 0 0 6px hsl(var(--ring) / 0.2);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .lecturer-module *:focus-visible {
+    transition: none;
+  }
+}
+
+/* Dark mode adjustments */
+.dark .lecturer-module *:focus-visible {
+  outline-color: hsl(var(--ring));
+}
+
+.dark .lecturer-module button:focus-visible,
+.dark .lecturer-module [role="button"]:focus-visible {
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.15);
+}
+
+/* Focus within styles for containers */
+.lecturer-module .focus-within-ring:focus-within {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Remove default focus styles when focus-visible is supported */
+.lecturer-module *:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure focus is visible on all interactive elements */
+.lecturer-module button,
+.lecturer-module a,
+.lecturer-module input,
+.lecturer-module textarea,
+.lecturer-module select,
+.lecturer-module [role="button"],
+.lecturer-module [role="link"],
+.lecturer-module [tabindex="0"] {
+  position: relative;
+}
+
+/* Focus indicator for custom components */
+.lecturer-module .custom-focus:focus-visible::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid hsl(var(--ring));
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Disabled state - no focus indicator */
+.lecturer-module *:disabled:focus-visible,
+.lecturer-module [aria-disabled="true"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Focus trap indicator (for modals) */
+.lecturer-module .focus-trap-active {
+  position: relative;
+}
+
+.lecturer-module .focus-trap-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-color: hsl(var(--background) / 0.8);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+  pointer-events: none;
+}
